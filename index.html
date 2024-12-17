@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фотограф - Егор</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+  
+    <!-- Модальное окно для капчи -->
+<div id="captchaModal" style="display: none;">
+    <div class="captcha-container">
+        <p id="captchaText"></p> <!-- Отображение текста капчи -->
+        <input type="text" id="captchaInput" placeholder="Введите капчу">
+        <button id="refreshCaptcha">Обновить капчу</button>
+        <button id="verifyCaptcha">Проверить капчу</button>
+        <p id="captchaMessage"></p> <!-- Сообщение о результате -->
+    </div>
+</div>
+
+    
+    <header>
+        <!-- Шапка сайта -->
+        <div class="logo-time">
+            <div class="logo">
+                <img src="img/logo.png" alt="Логотип">
+            </div>
+            <!-- Виджет времени на JavaScript -->
+            <div id="time-widget" class="time">
+                <p id="time"></p>
+            </div>
+        </div>
+        <h1 class="site-title">Фотографии от Егора</h1>
+        <nav>
+            <ul>
+                <li><a href="#about">О фотографе</a></li>
+                <li><a href="#gallery">Галерея</a></li>
+                <li><a href="#contact">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Слайдер -->
+    <div class="slider-container">
+        <div class="slider">
+            <img src="img/photo-1.jpg" alt="Фото 1">
+            <img src="img/photo-7.jpg" alt="Фото 2">
+            <img src="img/photo-5.jpg" alt="Фото 3">
+        </div>
+        <button class="prev-button">&lt;</button>
+        <button class="next-button">&gt;</button>
+    </div>
+
+    <!-- О фотографе -->
+    <section id="about">
+        <h2>О фотографе</h2>
+        <p>Меня зовут Егор, и я — фотограф, который увлечен искусством запечатления мгновений. Фотография для меня — это не просто работа, это способ передать эмоции, создать атмосферу и рассказать истории через изображения...</p>
+    </section>
+
+    <!-- Галерея -->
+    <section id="gallery">
+        <h2>Галерея</h2>
+        <div class="gallery">
+            <img src="img/photo-6.jpg" alt="Галерея 1">
+            <img src="img/photo-3.jpg" alt="Галерея 2">
+            <img src="img/photo-2.jpg" alt="Галерея 3">
+            <img src="img/photo-4.jpg" alt="Галерея 4">
+        </div>
+    </section>
+
+    <!-- Форма обратной связи -->
+    <section id="contact">
+        <h2>Связаться с фотографом</h2>
+        <form id="contactForm">
+            <label for="name">Ваше имя:</label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="email">Ваш email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="message">Сообщение:</label>
+            <textarea id="message" name="message" required></textarea>
+
+            <button type="button" id="submitForm">Отправить</button>
+        </form>
+    </section>
+
+    <!-- Подвал сайта -->
+    <footer>
+        <div class="social-icons">
+            <a href="https://t.me/plugftp" class="social-icon"><img src="img/tg.webp" alt="Telegram"></a>
+            <a href="https://vk.com/p1uggg" class="social-icon"><img src="img/vk.png" alt="VK"></a>
+            <a href="https://instagram.com" class="social-icon"><img src="img/ig.png" alt="Instagram"></a>
+        </div>
+        <p>&copy; 2024 Егор. Все права защищены.</p>
+    </footer>
+
+    <button id="scrollToTopButton">Наверх</button>
+
+    <!-- Скрипт для времени -->
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            const timeString = `${hours}:${minutes}:${seconds}`;
+            document.getElementById('time').textContent = timeString;
+        }
+        setInterval(updateTime, 1000);  // Обновление времени каждую секунду
+        updateTime();  // Инициализация времени сразу при загрузке
+    </script>
+
+    <!-- Скрипт для капчи -->
+    <script>
+        // Генерация случайной капчи
+        function generateCaptcha() {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let captcha = '';
+            for (let i = 0; i < 6; i++) {
+                captcha += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            document.getElementById('captchaText').textContent = captcha;
+            document.getElementById('captchaInput').value = '';  // Очистка поля ввода
+            return captcha;
+        }
+
+        // Открытие модального окна и генерация капчи
+        document.getElementById('submitForm').addEventListener('click', function() {
+            document.getElementById('captchaModal').style.display = 'block';
+            const captcha = generateCaptcha();
+            document.getElementById('verifyCaptcha').onclick = function() {
+                const userInput = document.getElementById('captchaInput').value;
+                if (userInput === captcha) {
+                    document.getElementById('captchaMessage').textContent = 'Капча пройдена успешно!';
+                    document.getElementById('captchaMessage').style.color = 'green';
+                    document.getElementById('captchaModal').style.display = 'none';
+                    document.getElementById('contactForm').submit(); // Отправка формы
+                } else {
+                    document.getElementById('captchaMessage').textContent = 'Неверный ввод. Попробуйте снова.';
+                    document.getElementById('captchaMessage').style.color = 'red';
+                    generateCaptcha(); // Перегенерация капчи
+                }
+            };
+        });
+
+        // Обновление капчи
+        document.getElementById('refreshCaptcha').addEventListener('click', function() {
+            generateCaptcha();
+        });
+
+        // Закрытие модального окна при нажатии вне его
+        window.onclick = function(event) {
+            if (event.target === document.getElementById('captchaModal')) {
+                document.getElementById('captchaModal').style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>
